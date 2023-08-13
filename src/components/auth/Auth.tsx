@@ -1,36 +1,43 @@
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import  Login from '../ui/Login';
-import Signin from '../ui/Signin';
+import Signup from '../ui/Signup';
+import { useLoginState } from '../../hooks/useLoginState';
+import { useSignUpState } from '../../hooks/useSignupState';
 
 export const Auth = () => {
-	const [authState, setAuthState] = useState<'login' | 'signin'>('signin');
-	const [email, setEmail] = useState('');
-	const [password, setPassword] = useState('');
+	const [authState, setAuthState] = useState<'login' | 'signup'>('login');
+	const  {
+		email: loginEmail,
+		password: logInPassword,
+		setLoginEmail,
+		setLoginPassword
+	} = useLoginState();
 
-	const setLoginEmail = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-		setEmail(e.target.value);
-	}, []);
-	const setLoginPassword = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-		setPassword(e.target.value);
-	}, []);
+	const {
+		email: signUpEmail,
+		password: signUpPassword,
+		setSignupPassword,
+		setSignupEmail
+	} = useSignUpState();
+
 	if(authState == 'login'){
 		return <div className="h-full overflow-hidden flex flex-col justify-center items-center bg-slate-300">
-			<Login email={email} setEmail={setLoginEmail} password={password} setPassword={setLoginPassword}>
+			<Login email={loginEmail} setEmail={setLoginEmail} password={logInPassword} setPassword={setLoginPassword}>
 				<p className="mt-7 self-start">
 					{'Don\'t'} have an account?
-					<span className="text-blue-600 underline cursor-pointer ml-3" onClick={() => setAuthState('signin') }>Sign In</span>
+					<span className="text-blue-600 underline cursor-pointer ml-3" onClick={() => setAuthState('signup') }>Sign Up</span>
 				</p>
 			</Login>
 		</div>;
 	}
-	if(authState == 'signin'){
+	if(authState == 'signup'){
 		return <div className="h-full overflow-hidden flex flex-col justify-center items-center bg-slate-300">
-			<Signin email={email} setEmail={setLoginEmail} password={password} setPassword={setLoginPassword}>
+			<Signup email={signUpEmail} setEmail={setSignupEmail} password={signUpPassword} setPassword={setSignupPassword}>
 				<p className="mt-7 self-start">
 					Already have an account?
 					<span className="text-blue-600 underline cursor-pointer ml-3" onClick={() => setAuthState('login') }>Log In</span>
 				</p>
-			</Signin>
+			</Signup>
 		</div>;
 	}
 };
