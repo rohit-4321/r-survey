@@ -11,6 +11,10 @@ export const useSignUpState = () => {
 		setPassword(p);
 	}, []);
 
+	// const signUpFirebase = useCallback(() => {
+	// 	return createUserWithEmailAndPassword(firebaseAuth, email, password);
+	// }, [firebaseAuth, email, password]);
+
 	return {
 		email,password, setSignupPassword, setSignupEmail
 	};
