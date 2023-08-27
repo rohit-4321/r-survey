@@ -7,36 +7,36 @@ interface IUser {
     setUser: ((user: User | undefined) => void )
 }
 export const UserContext = createContext<IUser>({
-	user: undefined,
-	setUser: () => {}
+  user: undefined,
+  setUser: () => {}
 });
 
 export const UserContextProvider:FC<{children: React.ReactNode}> = ({children}) => {
-	const [user, _setUser] = useState<IUser['user']>();
+  const [user, _setUser] = useState<IUser['user']>();
 
-	const setUser = useCallback((u: IUser['user']) => {
-		_setUser(u);
-	}, []);
+  const setUser = useCallback((u: IUser['user']) => {
+    _setUser(u);
+  }, []);
 
-	useEffect(() => {
-		const authCleanUp =  onAuthStateChanged(firebaseAuth, (user) => {
-			if(user){
-				_setUser(user);
-			}else {
-				_setUser(undefined);
-			}
-		});
-		return () => {
-			authCleanUp();
-		};
-	}, []);
+  useEffect(() => {
+    const authCleanUp =  onAuthStateChanged(firebaseAuth, (user) => {
+      if(user){
+        _setUser(user);
+      }else {
+        _setUser(undefined);
+      }
+    });
+    return () => {
+      authCleanUp();
+    };
+  }, []);
 
-	return (
-		<UserContext.Provider value={{
-			user,
-			setUser,
-		}}>
-			{children}
-		</UserContext.Provider>
-	);
+  return (
+    <UserContext.Provider value={{
+      user,
+      setUser,
+    }}>
+      {children}
+    </UserContext.Provider>
+  );
 };

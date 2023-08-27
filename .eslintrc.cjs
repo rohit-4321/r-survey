@@ -1,49 +1,54 @@
 module.exports = {
-	'env': {
-		'browser': true,
-		'es2021': true
-	},
-	'extends': [
-		'eslint:recommended',
-		'plugin:@typescript-eslint/recommended',
-		'plugin:react/recommended'
-	],
-	'overrides': [
-		{
-			'env': {
-				'node': true
-			},
-			'files': [
-				'.eslintrc.{js,cjs}'
-			],
-			'parserOptions': {
-				'sourceType': 'script'
-			}
-		}
-	],
-	'parser': '@typescript-eslint/parser',
-	'parserOptions': {
-		'ecmaVersion': 'latest',
-		'sourceType': 'module'
-	},
-	'plugins': [
-		'@typescript-eslint',
-		'react'
-	],
-	'rules': {
-		'indent': [
-			'error',
-			'tab'
-		],
-		'linebreak-style': 'off',
-		'react/react-in-jsx-scope': 'off',
-		'quotes': [
-			'error',
-			'single'
-		],
-		'semi': [
-			'error',
-			'always'
-		],
-	}
+  'env': {
+    'browser': true,
+    'es2021': true
+  },
+  settings: {
+    react: {
+      version: 'detect',
+    },
+  },
+  'extends': [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:react/recommended'
+  ],
+  'overrides': [
+    {
+      'env': {
+        'node': true
+      },
+      'files': [
+        '.eslintrc.{js,cjs}'
+      ],
+      'parserOptions': {
+        'sourceType': 'script'
+      }
+    }
+  ],
+  'parser': '@typescript-eslint/parser',
+  'parserOptions': {
+    'ecmaVersion': 'latest',
+    'sourceType': 'module'
+  },
+  'plugins': [
+    '@typescript-eslint',
+    'react'
+  ],
+  'rules': {
+    'indent': [
+      'error',
+      2
+    ],
+    'linebreak-style': 'off',
+    'react/react-in-jsx-scope': 'off',
+    'quotes': [
+      'error',
+      'single'
+    ],
+    'semi': [
+      'error',
+      'always'
+    ],
+  }
 };
