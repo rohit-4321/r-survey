@@ -1,11 +1,11 @@
 import { useContext, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../context/UserContext';
 import axiosInstance from '../../api/axios';
 import { firebaseAuth } from '../../global';
 
 export const Dashboard = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const {user} = useContext(UserContext);
 
 
@@ -29,11 +29,11 @@ export const Dashboard = () => {
       });
   };
   useEffect(() => {
-    if(user){
-      console.log('welcome');
-    }else {
-      navigate('/auth');
-    }
+    // if(user){
+    //   console.log('welcome');
+    // }else {
+    //   navigate('/auth');
+    // }
   },[user]);
 
   return <div>
