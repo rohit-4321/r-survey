@@ -6,7 +6,7 @@ import { useOutsideClick } from '../../../hooks/useOutsideClick';
 export const NavSmallScreen= () => {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const ref = useOutsideClick<HTMLDivElement>(() => {
-    setIsPopupVisible((d) => !d);
+    setIsPopupVisible((d) => d ? !d : d);
   });
   const onItemClick = (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
     e.stopPropagation();

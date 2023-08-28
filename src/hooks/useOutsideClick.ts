@@ -7,7 +7,6 @@ export const useOutsideClick = <T extends HTMLElement>(onOutsideClick: () => voi
     const handler = (event: MouseEvent) => {
       if( ref.current && !ref.current.contains(event.target as Node)){
         onOutsideClick();
-        console.log(event.target);
       }
     };
     document.addEventListener('click', handler);
