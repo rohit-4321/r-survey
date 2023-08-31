@@ -9,7 +9,7 @@ function App() {
     <BrowserRouter>
       <div className='App h-screen bg-slate-900 text-slate-300 flex flex-col'>
         <Header />
-        <div className='flex-auto'>
+        <div className='flex-auto overflow-auto'>
           <Routes>
             {
               router.map((route) => <Route key={route.path} path={route.path} element = {route.element}/>)

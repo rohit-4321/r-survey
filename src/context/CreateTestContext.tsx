@@ -1,11 +1,11 @@
-import React, { FC, createContext, useRef } from 'react';
+import React, { FC, createContext, useContext, useReducer } from 'react';
 
-interface TestSchema {
+export interface TestSchema {
     title: string
     description: string
     questions: Question[]
 }
-interface Question {
+export interface Question {
     value: string,
     type: 'multi' | 'single'
     options: string[],
@@ -17,17 +17,65 @@ const initialValue: TestSchema= {
   questions: [],
 };
 
+type Action<T, K> = {
+  type: T,
+  payload: K
+}
+export type CreateAction = Action<'setTitle', string>
+ | Action<'setDescriptions', string>
+ | Action<'addQuestion', undefined>
+
+
+const reducer = (currState: TestSchema, action: CreateAction) : TestSchema => {
+  switch (action.type) {
+  case 'setTitle': {
+    return {
+      ...currState,
+      title : action.payload
+    };
+  }
+  case 'setDescriptions': {
+    return {
+      ...currState,
+      description: action.payload
+    };
+  } 
+  case 'addQuestion': {
+    const ques: Question = {
+      value: '',
+      answer: [],
+      type: 'single',
+      options: [],
+    };
+    return {
+      ...currState,
+      questions: [...currState.questions, ques]
+    };
+  }
+  }
+};
 export const CreateTestContext = createContext<{
-    state: TestSchema
-}>({
-  state: initialValue
-});
+  state: TestSchema,
+   dispatch: React.Dispatch<CreateAction>
+} | null>(null);
+
 
 export const CreateTestProvider:FC<{children: React.ReactNode}> = ({children}) => {
-  const testState = useRef(initialValue);
+  const [state, dispatch] = useReducer(reducer, initialValue);
+
   return <CreateTestContext.Provider value={{
-    state: testState.current
+    state,
+    dispatch
   }}>
     {children}
   </CreateTestContext.Provider>;
+};
+
+export const useCreateTestContext = () => {
+  const ctx = useContext(CreateTestContext);
+  // console.log(ctx);
+  if(!ctx) {
+    throw new Error('useCreateTestContext in not inside it\'s provider');
+  }
+  return ctx;
 };
