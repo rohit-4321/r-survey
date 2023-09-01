@@ -9,7 +9,7 @@ export interface Question {
     value: string,
     type: 'multi' | 'single'
     options: string[],
-    answer: string[]
+    answer: number[],
 }
 const initialValue: TestSchema= {
   title: 'Title',
@@ -24,6 +24,10 @@ type Action<T, K> = {
 export type CreateAction = Action<'setTitle', string>
  | Action<'setDescriptions', string>
  | Action<'addQuestion', undefined>
+ | Action<'modifyQuestion', {
+  index: number,
+  question: Question
+ }>
 
 
 const reducer = (currState: TestSchema, action: CreateAction) : TestSchema => {
@@ -43,13 +47,21 @@ const reducer = (currState: TestSchema, action: CreateAction) : TestSchema => {
   case 'addQuestion': {
     const ques: Question = {
       value: '',
-      answer: [],
       type: 'single',
       options: [],
+      answer: []
     };
     return {
       ...currState,
       questions: [...currState.questions, ques]
+    };
+  }
+  case 'modifyQuestion' : {
+    const q = [...currState.questions];
+    q[action.payload.index] = action.payload.question;
+    return {
+      ...currState,
+      questions: q
     };
   }
   }
