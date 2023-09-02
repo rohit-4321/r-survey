@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
-import { CreateTestProvider, Question, useCreateTestContext,  } from '../../context/CreateTestContext';
+import { CreateTestProvider, Question, useCreateTestContext,  } from '../../context/createTest/CreateTestContext';
 import { QuestionCreate } from './QuestionCreate';
-import { Title } from './Title';
+import Title  from './Title';
 
 const Creates = () => {
   const {state, dispatch} = useCreateTestContext();
@@ -39,4 +39,8 @@ const Creates = () => {
 
 
 export const Create = () => {
+
+  return <CreateTestProvider>
+    <Creates />
+  </CreateTestProvider>;
 };

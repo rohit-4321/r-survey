@@ -8,8 +8,11 @@ export interface TestSchema {
 export interface Question {
     value: string,
     type: 'multi' | 'single'
-    options: string[],
-    answer: number[],
+    options: {
+      value: string,
+      isSelected: boolean
+    }[],
+
 }
 const initialValue: TestSchema= {
   title: 'Title',
@@ -25,9 +28,11 @@ export type CreateAction = Action<'setTitle', string>
  | Action<'setDescriptions', string>
  | Action<'addQuestion', undefined>
  | Action<'modifyQuestion', {
-  index: number,
-  question: Question
- }>
+    index: number,
+    question: Question
+  }>
+ | Action<'removeAllSelectedOption', number>
+
 
 
 const reducer = (currState: TestSchema, action: CreateAction) : TestSchema => {
@@ -49,7 +54,6 @@ const reducer = (currState: TestSchema, action: CreateAction) : TestSchema => {
       value: '',
       type: 'single',
       options: [],
-      answer: []
     };
     return {
       ...currState,
@@ -62,6 +66,17 @@ const reducer = (currState: TestSchema, action: CreateAction) : TestSchema => {
     return {
       ...currState,
       questions: q
+    };
+  }
+  case 'removeAllSelectedOption': {
+    const temp= [...currState.questions];
+    temp[action.payload].options = temp[action.payload].options.map((o) => ({
+      ...o,
+      isSelected: false,
+    }));
+    return {
+      ...currState,
+      questions: temp
     };
   }
   }
