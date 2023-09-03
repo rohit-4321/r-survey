@@ -78,10 +78,10 @@ export type AllActions = {
 
 export const reducer = <T extends keyof AllActions,  K extends AllActions[T]>(
   currState: TestSchema,
-  action: {key: T, payload: K
+  action: {type: T, payload: K
 }) : TestSchema => {
-  const func = actions[action.key];
-  return func(currState, action as never);
+  const func = actions[action.type];
+  return func(currState, action.payload as never);
 };
 
 export type DispatchType = Parameters<typeof reducer>[1];
