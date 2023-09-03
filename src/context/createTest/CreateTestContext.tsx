@@ -1,5 +1,5 @@
 import React, { FC, createContext, useContext, useReducer } from 'react';
-import { CreateAction, reducer } from './reducer';
+import { DispatchType, reducer } from './reducer';
 
 export interface TestSchema {
     title: string
@@ -23,7 +23,7 @@ const initialValue: TestSchema= {
 
 export const CreateTestContext = createContext<{
   state: TestSchema,
-   dispatch: React.Dispatch<CreateAction>
+   dispatch: React.Dispatch<DispatchType>
 } | null>(null);
 
 
@@ -40,7 +40,6 @@ export const CreateTestProvider:FC<{children: React.ReactNode}> = ({children}) =
 
 export const useCreateTestContext = () => {
   const ctx = useContext(CreateTestContext);
-  // console.log(ctx);
   if(!ctx) {
     throw new Error('useCreateTestContext in not inside it\'s provider');
   }
