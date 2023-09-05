@@ -1,6 +1,5 @@
-import { useCallback } from 'react';
-import { CreateTestProvider, Question, useCreateTestContext,  } from '../../context/createTest/CreateTestContext';
-import { QuestionCreate } from './QuestionCreate';
+import { CreateTestProvider, useCreateTestContext,  } from '../../context/createTest/CreateTestContext';
+import  QuestionCreate  from './QuestionCreate';
 import Title  from './Title';
 
 const Creates = () => {
@@ -8,16 +7,6 @@ const Creates = () => {
   const addQuestionHandler = () => {
     dispatch({type: 'addQuestion', payload: undefined});
   };
-
-  const setQuestion = useCallback((index: number, ques: Question) => {
-    dispatch({
-      type: 'modifyQuestion',
-      payload : {
-        index,
-        question: ques
-      }
-    });
-  }, []);
   return (
     <div className='wrapper md:w-[70%] w-[98%] flex flex-col gap-5 text-slate-100 mx-auto my-6'>
       <Title />
@@ -25,7 +14,6 @@ const Creates = () => {
         state.questions.map((ques, index) => <QuestionCreate
           key={index}
           question={ques}
-          setQuestion={setQuestion}
           quesIndex={index}
         />)
       }

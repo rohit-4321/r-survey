@@ -55,12 +55,153 @@ export const removeAllSelectedOption: Handler<number> = (currState, payload) => 
   };
 };
 
+export const addQuestionText: Handler<{
+  quesIndex: number,
+  value: string
+}> = (
+  currState,
+  {
+    quesIndex,
+    value
+  }
+) => {
+  const quesList = [...currState.questions];
+  quesList[quesIndex]= {
+    ...quesList[quesIndex],
+    value,
+  };
+
+  return {
+    ...currState,
+    questions: quesList,
+  };
+};
+export const onQuestionTypeSelected: Handler<{
+  quesIndex: number,
+  value: 'multi' | 'single'
+}> = (currState, {
+  quesIndex, value
+}) => {
+  const quesList = [...currState.questions];
+  quesList[quesIndex].options = quesList[quesIndex].options.map((op) => ({
+    ...op,
+    isSelected: false
+  }));
+  quesList[quesIndex].type = value;
+  return {
+    ...currState,
+    questions: quesList
+  };
+};
+export const onRadioOptionSelect: Handler<{
+  quesIndex: number,
+  optionIndex: number
+}> = (
+  currState, {
+    quesIndex,
+    optionIndex
+  }
+) => {
+  const quesList = [...currState.questions];
+  quesList[quesIndex].options = quesList[quesIndex].options.map((op, i) => {
+    return ({
+      ...op,
+      isSelected:optionIndex === i ? !op.isSelected : false
+    });
+  }); 
+  return {
+    ...currState,
+    questions: quesList
+  };
+};
+
+export const onCheckOptionSelect: Handler<{
+  quesIndex: number,
+  optionIndex: number
+}> = (
+  currState, {
+    quesIndex,
+    optionIndex
+  }
+) => {
+  const quesList = [...currState.questions];
+  quesList[quesIndex].options[optionIndex] = {
+    ...quesList[quesIndex].options[optionIndex],
+    isSelected: !quesList[quesIndex].options[optionIndex] 
+  };
+  return {
+    ...currState,
+    questions: quesList
+  };
+};
+
+export const setOptionText:Handler<{
+  quesIndex: number,
+  optionIndex: number,
+  value: string
+}> = (currState, {
+  optionIndex,
+  quesIndex,
+  value
+}) => {
+  const quesList = [...currState.questions];
+  const question = quesList[quesIndex];
+  question.options[optionIndex].value = value;
+  return {
+    ...currState,
+    questions: quesList
+  };
+};
+export const onDeleteOption:Handler<{
+  quesIndex: number,
+  optionIndex: number
+}> = (
+  currState,
+  {quesIndex, optionIndex}
+) => {
+  const quesList = [...currState.questions];
+  const options = quesList[quesIndex].options;
+  options.splice(optionIndex, 1);
+  return {
+    ...currState,
+    questions: quesList
+  };
+};
+export const addOption:Handler<{
+  quesIndex: number,
+}> = (
+  currState,
+  {
+    quesIndex
+  }
+) => {
+  const quesList = [...currState.questions];
+  console.log(quesList[quesIndex].options);
+  quesList[quesIndex].options = [...quesList[quesIndex].options, {
+    isSelected: false,
+    value: ''
+  }]; 
+  console.log(quesList[quesIndex].options);
+
+  return {
+    ...currState,
+    questions: quesList
+  };
+};
+
 export type AllActionsHandler = {
   setTitle: typeof setTitle,
   setDescriptions:  typeof setDescriptions,
   addQuestion: typeof addQuestion,
   modifyQuestion: typeof modifyQuestion,
   removeAllSelectedOption: typeof removeAllSelectedOption
+  onRadioOptionSelect: typeof onRadioOptionSelect,
+  onQuestionTypeSelected: typeof onQuestionTypeSelected,
+  onCheckOptionSelect: typeof onCheckOptionSelect,
+  setOptionText: typeof setOptionText,
+  addQuestionText: typeof addQuestionText,
+  onDeleteOption: typeof onDeleteOption,
+  addOption: typeof addOption,
 }
 
 const actions: AllActionsHandler = {
@@ -69,6 +210,13 @@ const actions: AllActionsHandler = {
   removeAllSelectedOption,
   setDescriptions,
   setTitle,
+  onRadioOptionSelect,
+  onQuestionTypeSelected,
+  onCheckOptionSelect,
+  setOptionText,
+  addQuestionText,
+  onDeleteOption,
+  addOption
 };
 export type AllActions = {
   [key in keyof AllActionsHandler]: Parameters<(AllActionsHandler)[key]>[1]
@@ -76,11 +224,14 @@ export type AllActions = {
 
 
 
-export const reducer = <T extends keyof AllActions,  K extends AllActions[T]>(
-  currState: TestSchema,
-  action: {type: T, payload: K
-}) : TestSchema => {
-  const func = actions[action.type];
+export const reducer = (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  currState: any,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  action: any,
+) => {
+  const func = actions[action.type as keyof AllActions];
+  console.log('reducer called');
   return func(currState, action.payload as never);
 };
 

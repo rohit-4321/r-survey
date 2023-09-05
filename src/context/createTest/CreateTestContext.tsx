@@ -1,5 +1,5 @@
 import React, { FC, createContext, useContext, useReducer } from 'react';
-import { DispatchType, reducer } from './reducer';
+import { AllActions, AllActionsHandler, reducer } from './reducer';
 
 export interface TestSchema {
     title: string
@@ -23,13 +23,30 @@ const initialValue: TestSchema= {
 
 export const CreateTestContext = createContext<{
   state: TestSchema,
-   dispatch: React.Dispatch<DispatchType>
-} | null>(null);
+   dispatch: <T extends keyof AllActionsHandler, K extends AllActions[T]>({ type, payload }: {
+    type: T;
+    payload: K;
+}) => void
+     }| null>(null);
 
 
 export const CreateTestProvider:FC<{children: React.ReactNode}> = ({children}) => {
-  const [state, dispatch] = useReducer(reducer, initialValue);
+  const [state, reducerDispatch] = useReducer(reducer, initialValue);
 
+  const dispatch = <T extends keyof AllActions, K extends AllActions[T]>(
+    {
+      type, payload
+    }: {
+      type: T,
+      payload: K,
+    }
+  ) => {
+    console.log('Dispatch funtion called');
+    reducerDispatch({
+      type,
+      payload
+    });
+  };
   return <CreateTestContext.Provider value={{
     state,
     dispatch

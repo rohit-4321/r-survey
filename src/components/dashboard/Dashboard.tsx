@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 // import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../context/UserContext';
 import axiosInstance from '../../api/axios';
@@ -7,6 +7,7 @@ import { firebaseAuth } from '../../global';
 export const Dashboard = () => {
   // const navigate = useNavigate();
   const {user} = useContext(UserContext);
+  const [value, setValue] = useState(0);
 
 
   const sendRequest = () => {
@@ -35,9 +36,11 @@ export const Dashboard = () => {
     //   navigate('/auth');
     // }
   },[user]);
-
+  console.log('called');
   return <div>
-    <button onClick={sendRequest}>
+    <button onClick={() => {
+      setValue(value + 1);
+    }}>
 		Reuqest
     </button>
   </div>;

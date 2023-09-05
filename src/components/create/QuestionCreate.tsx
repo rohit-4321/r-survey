@@ -1,60 +1,32 @@
 import { TextArea } from '../ui/TextArea';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Option } from './Option';
-import { Question,  } from '../../context/createTest/CreateTestContext';
+import Option  from './Option';
+import {useCallback, useMemo} from 'react';
+import { Question, useCreateTestContext,  } from '../../context/createTest/CreateTestContext';
 
 
 type QuestionsCreateProps = {
   question: Question,
-  setQuestion: (index: number, ques: Question) => void,
-  quesIndex:number
+  quesIndex:number,
+  onQuestionTypeSelect:(value: 'multi' | 'single') => void,
+  setQuestionText: (ques: string) => void,
+  setOptiontext: (value:string, optIndex: number) => void,
+  onDeleteOption: (optIndex: number) => void,
+  onRadioSelected: (optIndex: number) => void,
+  onCheckboxSlected: (optIndex: number) => void,
+  addOption: () => void
 }
-export const QuestionCreate = ({
+const QuestionCreate = ({
   question,
-  setQuestion,
-  quesIndex
+  quesIndex,
+  onQuestionTypeSelect,
+  setQuestionText,
+  onRadioSelected,
+  onDeleteOption,
+  onCheckboxSlected,
+  setOptiontext,
+  addOption
 }: QuestionsCreateProps) => {
-  const onQuestionTypeSelect = (value:  'multi' | 'single') => {
-    
-    const optArr = question.options.map((op) => ({
-      ...op,
-      isSelected: false
-    }));
-    setQuestion(quesIndex,{
-      ...question,
-      type: value,
-      options: optArr
-    });
-
-  };
-
-  const onCheckBoxSelect = (optIndex: number) => {
-    const optArr = [...question.options];
-
-    optArr[optIndex] = {
-      ...optArr[optIndex],
-      isSelected: !optArr[optIndex].isSelected
-    };
-
-    setQuestion(quesIndex, {
-      ...question,
-      options: optArr
-    });
-  };
-  const onRadioSelected = (optIndex: number) => {
-    let optArr = [...question.options];
-    optArr = optArr.map((op, i) => {
-
-      return ({
-        ...op,
-        isSelected:optIndex === i ? !op.isSelected : false
-      });
-    }); 
-    setQuestion(quesIndex, {
-      ...question,
-      options: optArr
-    });
-  };
   return <div className='flex flex-col gap-4 py-6 px-3 rounded border bg-slate-800 border-slate-700'>
     <select
       className='outline-none bg-slate-700 w-[20rem] px-2 py-1'
@@ -73,10 +45,7 @@ export const QuestionCreate = ({
         placeholder={`Enter Question ${quesIndex + 1}`}
         className='bg-transparent line-clamp-none outline-none resize-none text-xl w-full'
         onChange={(e) => {
-          setQuestion(quesIndex, {
-            ...question,
-            value: e.target.value
-          });
+          setQuestionText(e.target.value);
         }}
         value={question.value}
       />
@@ -94,66 +63,141 @@ export const QuestionCreate = ({
               value={opt.value}
               placeholder={`Option ${i + 1}`}
               onChange={(e) => {
-                const o = [...question.options];
-                o[i].value = e.target.value;
-                setQuestion(quesIndex, {
-                  ...question,
-                  options: o
-                });
+                setOptiontext(e.target.value, i);
               }}
               className='bg-transparent line-clamp-none outline-none resize-none  w-full'
             />
-            <DeleteIcon className='cursor-pointer' onClick={()=> {
-              const op = [...question.options];
-              op.splice(i, 1);
-              setQuestion(quesIndex, {
-                ...question,
-                options: op
-              });
-            } } />
+            <DeleteIcon
+              className='cursor-pointer' 
+              onClick={()=> {
+                onDeleteOption(i);
+              } } />
           </div>
-        )) : question.options.map((opt, i) => (
-          <div className='flex items-center gap-3' key={i}>
+        )) : question.options.map((opt, optionIndex) => (
+          <div className='flex items-center gap-3' key={optionIndex}>
             <div onClick={() => {
-              onCheckBoxSelect(i);
+              onCheckboxSlected(optionIndex);
             }}>
-              <Option optionType='checkbox' isSelected={question.options[i].isSelected}  />
+              <Option
+                optionType='checkbox'
+                isSelected={question.options[optionIndex].isSelected}
+              />
             </div>
             <TextArea
               value={opt.value}
-              placeholder={`Option ${i + 1}`}
+              placeholder={`Option ${optionIndex + 1}`}
               onChange={(e) => {
-                const o = [...question.options];
-                o[i].value = e.target.value;
-                setQuestion(quesIndex, {
-                  ...question,
-                  options: o
-                });
+                setOptiontext(e.target.value, optionIndex);
               }}
               className='bg-transparent line-clamp-none outline-none resize-none  w-full'
             />
             <DeleteIcon className='cursor-pointer' onClick={()=> {
-              const op = [...question.options];
-              op.splice(i, 1);
-              setQuestion(quesIndex, {
-                ...question,
-                options: op
-              });
+              onDeleteOption(optionIndex);
             } } />
           </div>
         ))
     }
     <button className='self-start bg-green-700 text-teal-50 font-semibold px-3 py-1 rounded' onClick={() => {
-      setQuestion(quesIndex, {
-        ...question,
-        options:[
-          ...question.options,
-          {
-            value: '',
-            isSelected: false
-          }
-        ]
-      });
+      addOption();
     }}>+ OPTION</button>
   </div>;
 };
+
+const QuestionCreateWrapper = ({
+  quesIndex,
+  question
+}: Pick<QuestionsCreateProps, 'question' | 'quesIndex'>) => {
+  const { state , dispatch} = useCreateTestContext();
+  const onRadioOptionSelected = useCallback((optionIndex: number) => {
+    dispatch({
+      type: 'onRadioOptionSelect',
+      payload: {
+        quesIndex,
+        optionIndex
+      }
+    });
+  },[dispatch]);
+
+  const onQuestionTypeSelected = useCallback((value: 'multi' | 'single') => {
+    dispatch({
+      type: 'onQuestionTypeSelected',
+      payload: {
+        quesIndex,
+        value,
+      }
+    });
+  }, [dispatch]);
+
+  const onCheckboxSelected = useCallback((optionIndex: number) => {
+    dispatch({
+      type: 'onCheckOptionSelect',
+      payload: {
+        quesIndex,
+        optionIndex,
+      }
+    });
+  },[dispatch]);
+  const setOptionText = useCallback((value: string, optionIndex: number) => {
+    console.log(value);
+    dispatch({
+      type: 'setOptionText',
+      payload: {
+        quesIndex: quesIndex,
+        optionIndex: optionIndex,
+        value,
+      }
+    });
+  },[dispatch]);
+  const setQuestionText = useCallback((value: string) => {
+    dispatch({
+      type: 'addQuestionText',
+      payload: {
+        quesIndex,
+        value,
+      }
+    });
+  },[dispatch]);
+  const deleteQuestion = useCallback((optionIndex: number) => {
+    dispatch({
+      type: 'onDeleteOption',
+      payload: {
+        quesIndex,
+        optionIndex
+      }
+    });
+  },[dispatch]);
+  const addOption = useCallback(() => {
+    console.log('vcalles');
+    dispatch({
+      type: 'addOption',
+      payload: {
+        quesIndex,
+      }
+    });
+  }, [dispatch]);
+
+
+  return useMemo(() => <QuestionCreate
+    onRadioSelected={onRadioOptionSelected}
+    quesIndex={quesIndex}
+    question={question}
+    onQuestionTypeSelect={onQuestionTypeSelected}
+    onCheckboxSlected={onCheckboxSelected}
+    setOptiontext={setOptionText}
+    setQuestionText={setQuestionText}
+    onDeleteOption={deleteQuestion}
+    addOption={addOption}
+  />,[
+    addOption,
+    deleteQuestion,
+    setQuestionText,
+    setOptionText,
+    onCheckboxSelected,
+    onQuestionTypeSelected,
+    question,
+    quesIndex,
+    onRadioOptionSelected
+  ]);
+};
+
+export default QuestionCreateWrapper;

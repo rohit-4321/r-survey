@@ -4,7 +4,7 @@ type OptionRadioProps = {
   isSelected: boolean,
   optionType: 'radio' | 'checkbox'
 }
-export const Option:FC<OptionRadioProps> = ({
+const Option:FC<OptionRadioProps> = ({
   isSelected,
   optionType,
 }) => {
@@ -12,4 +12,6 @@ export const Option:FC<OptionRadioProps> = ({
     <div className={`w-full h-full ${optionType === 'checkbox' ? 'rounded-md' : 'rounded-full'}  ${isSelected ? 'bg-blue-500' : 'bg-transparent'}`}></div>
   </div>;
 };
+
+export default Option;
 
