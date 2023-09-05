@@ -1,5 +1,4 @@
-import { useRef, useCallback } from 'react';
-import { useForceUpdate } from '../../hooks/useForceUpdate';
+import { useCallback, useState } from 'react';
 import { Question, TestSchema } from './CreateTestContext';
 
 /// I just want to use Generics 🙂🙂
@@ -239,9 +238,7 @@ export const reducer = (
 export type DispatchType = Parameters<typeof reducer>[1];
 
 export const useCreateTestState = () => {
-  const state = useRef<TestSchema>(initialValue);
-  const forceUpdate= useForceUpdate();
-  console.log(state.current);
+  const [state, setState] = useState<TestSchema>(initialValue);
   const dispatch = useCallback(<T extends keyof AllActions, K extends AllActions[T]>(
     {
       type, payload
@@ -250,14 +247,13 @@ export const useCreateTestState = () => {
       payload: K,
     }
   ) => {
-    state.current =  reducer(state.current, {
+    setState((state) => reducer(state, {
       type,
       payload
-    });
-    forceUpdate();
+    }));
   }, []);
 
   return [
-    state.current, dispatch
+    state, dispatch
   ] as const;
 };
