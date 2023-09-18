@@ -14,6 +14,6 @@ export const useCopyRef = (
       ref.current = targetRef.current;
     }
   }, [ref]);
-  
+
   return targetRef;
 };
