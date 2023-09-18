@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import axiosInstance from '../../api/axios';
 import { firebaseAuth } from '../../global';
+// import { useUserContext } from '../../context/user/userContext';
 
 export const Dashboard = () => {
   const [value, setValue] = useState(0);
+  // const user = useUserContext();
 
   const sendRequest = () => {
     firebaseAuth.currentUser?.getIdToken(true)

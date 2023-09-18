@@ -1,5 +1,5 @@
 import { User, onAuthStateChanged } from 'firebase/auth';
-import { FC, createContext, useContext, useLayoutEffect, useState } from 'react';
+import { FC, createContext, useContext, useEffect, useState } from 'react';
 import { auth } from '../../global/firebase/init';
 import { useNavigate } from 'react-router-dom';
 
@@ -10,7 +10,7 @@ export const UserContextProvider: FC<{ children: React.ReactNode }> = ({ childre
   const [user, setUser] = useState<User>();
   const navigate = useNavigate();
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const  unsub = onAuthStateChanged(auth, (ur) => {
       if (ur) {
 
