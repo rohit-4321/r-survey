@@ -11,17 +11,18 @@ export const UserContextProvider: FC<{ children: React.ReactNode }> = ({ childre
   const navigate = useNavigate();
 
   useLayoutEffect(() => {
-    onAuthStateChanged(auth, (ur) => {
+    const  unsub = onAuthStateChanged(auth, (ur) => {
       if (ur) {
 
         setUser(ur);
       } else {
+        console.log('sending auth');
         navigate('/auth');
         setUser(undefined);
       }
     });
+    return () => {unsub();};
   }, []);
-
   return <UserContext.Provider value={user}>
     {children}
   </UserContext.Provider>;
