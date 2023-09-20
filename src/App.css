@@ -1,0 +1,14 @@
+
+.snackbar-wrapper{
+    @apply absolute bottom-[10px] right-[10px] z-[9999999] flex flex-col gap-2 max-h-[40vh] overflow-hidden
+}
+.snack-bar-success {
+    @apply px-4 py-5 bg-green-800 text-white min-w-[250px] border-[1px] rounded border-neutral-200 
+}
+.snack-bar-error {
+    @apply px-4 py-5 bg-red-800 text-white min-w-[250px] border-[1px] rounded border-neutral-200
+}
+.snack-bar-warning {
+    @apply px-4 py-5 bg-amber-700 text-white min-w-[250px] border-[1px] rounded border-neutral-200 
+}
+
