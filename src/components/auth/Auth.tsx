@@ -3,7 +3,7 @@ import Login from '../ui/Login';
 import Signup from '../ui/Signup';
 
 export const Auth = () => {
-  const [authState, setAuthState] = useState<'login' | 'signup'>('login');
+  const [authState, setAuthState] = useState<'login' | 'signup'>('signup');
 
   if (authState == 'login') {
     return <div className="h-full overflow-hidden flex flex-col justify-center items-center">

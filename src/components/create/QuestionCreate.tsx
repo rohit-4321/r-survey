@@ -107,7 +107,7 @@ const QuestionCreateWrapper = ({
   quesIndex,
   question
 }: Pick<QuestionsCreateProps, 'question' | 'quesIndex'>) => {
-  const { state , dispatch} = useCreateTestContext();
+  const {dispatch} = useCreateTestContext();
   const onRadioOptionSelected = useCallback((optionIndex: number) => {
     dispatch({
       type: 'onRadioOptionSelect',
