@@ -33,6 +33,7 @@ export const createSnackbar = ({
   snackBar.className = className;
   snackBar.textContent = message;
   snackbarWrapper.appendChild(snackBar);
+  snackbarWrapper.scrollTop = snackbarWrapper.scrollHeight ;
   setTimeout(() => {
     snackbarWrapper.removeChild(snackBar);
   }, Duration[duration]);
