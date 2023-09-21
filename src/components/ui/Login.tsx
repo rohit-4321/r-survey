@@ -1,11 +1,31 @@
-import React, {FC, memo } from 'react';
+import React, {FC, memo, useCallback, useState } from 'react';
 import { AuthButton } from './AuthButton';
-import { useLoginState } from '../../hooks/useLoginState';
+
+const useLoginState = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const setLoginEmail = useCallback((e: string) => {
+    setEmail(e);
+  }, []);
+
+  const setLoginPassword = useCallback((p: string) => {
+    setPassword(p);
+  }, []);
+
+  const loginFirebase = useCallback(() => {
+  }, [email, password]);
+  return {
+    email,
+    password,
+    setLoginEmail,
+    setLoginPassword,
+    loginFirebase
+  };
+};
 
 interface LoginProps {
-    children?: React.ReactNode
+  children?: React.ReactNode
 }
-
 const Login:FC<LoginProps> = ({
   children
 }) => {
@@ -22,7 +42,7 @@ const Login:FC<LoginProps> = ({
     <input className="bg-transparent px-5 py-2 border-2 w-full focus:outline-none rounded text-slate-200 font-semibold" type="text" placeholder="Password" value={password} onChange={(e) => {setLoginPassword(e.target.value);}} />
     <AuthButton value='Login' 
       onClick={() => {
-        loginFirebase(email, password);
+        loginFirebase();
       }}
     />
 
