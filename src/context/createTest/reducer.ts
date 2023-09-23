@@ -45,14 +45,18 @@ export const modifyQuestion: Handler<{index: number, question: Question}>  =(cur
 };
 
 export const removeAllSelectedOption: Handler<number> = (currState, payload) => {
-  const temp= [...currState.questions];
-  temp[payload].options = temp[payload].options.map((o) => ({
-    ...o,
-    isSelected: false,
+  const quesList = [...currState.questions];
+  const questionToModify = { ...quesList[payload] };
+  const optionsToModify = [...questionToModify.options];
+  const updatedOptions = optionsToModify.map((option) => ({
+    ...option,
+    isSelected: false
   }));
+  questionToModify.options = updatedOptions;
+  quesList[payload] = questionToModify;
   return {
     ...currState,
-    questions: temp
+    questions: quesList
   };
 };
 
@@ -84,11 +88,17 @@ export const onQuestionTypeSelected: Handler<{
   quesIndex, value
 }) => {
   const quesList = [...currState.questions];
-  quesList[quesIndex].options = quesList[quesIndex].options.map((op) => ({
+  const options = [...quesList[quesIndex].options];
+  const updatedOptions = options.map((op) => ({
     ...op,
     isSelected: false
   }));
-  quesList[quesIndex].type = value;
+  const updatedQuestion = { 
+    ...quesList[quesIndex], 
+    options: updatedOptions,
+    type: value 
+  };
+  quesList[quesIndex] = updatedQuestion;
   return {
     ...currState,
     questions: quesList
@@ -104,12 +114,18 @@ export const onRadioOptionSelect: Handler<{
   }
 ) => {
   const quesList = [...currState.questions];
-  quesList[quesIndex].options = quesList[quesIndex].options.map((op, i) => {
-    return ({
-      ...op,
-      isSelected:optionIndex === i ? !op.isSelected : false
-    });
-  }); 
+
+  const options = [...quesList[quesIndex].options];
+
+  const updatedOptions = options.map((op, i) => ({
+    ...op,
+    isSelected: i === optionIndex ? !op.isSelected : false
+  }));
+
+  const updatedQuestion = { ...quesList[quesIndex], options: updatedOptions };
+
+  quesList[quesIndex] = updatedQuestion;
+
   return {
     ...currState,
     questions: quesList
@@ -126,10 +142,14 @@ export const onCheckOptionSelect: Handler<{
   }
 ) => {
   const quesList = [...currState.questions];
-  quesList[quesIndex].options[optionIndex] = {
-    ...quesList[quesIndex].options[optionIndex],
-    isSelected: !quesList[quesIndex].options[optionIndex] 
+  const options = [...quesList[quesIndex].options];
+  const updatedOption = {
+    ...options[optionIndex],
+    isSelected: !options[optionIndex].isSelected
   };
+  options[optionIndex] = updatedOption;
+  const updatedQuestion = { ...quesList[quesIndex], options };
+  quesList[quesIndex] = updatedQuestion;
   return {
     ...currState,
     questions: quesList
@@ -146,8 +166,12 @@ export const setOptionText:Handler<{
   value
 }) => {
   const quesList = [...currState.questions];
-  const question = quesList[quesIndex];
-  question.options[optionIndex].value = value;
+  const options = [...quesList[quesIndex].options];
+  const updatedOption = { ...options[optionIndex], value };
+  options[optionIndex] = updatedOption;
+  const updatedQuestion = { ...quesList[quesIndex], options };
+  quesList[quesIndex] = updatedQuestion;
+ 
   return {
     ...currState,
     questions: quesList
@@ -161,8 +185,15 @@ export const onDeleteOption:Handler<{
   {quesIndex, optionIndex}
 ) => {
   const quesList = [...currState.questions];
-  const options = quesList[quesIndex].options;
+  
+  const options = [...quesList[quesIndex].options];
+  
   options.splice(optionIndex, 1);
+  
+  const updatedQuestion = { ...quesList[quesIndex], options };
+  
+  quesList[quesIndex] = updatedQuestion;
+
   return {
     ...currState,
     questions: quesList
@@ -177,13 +208,14 @@ export const addOption:Handler<{
   }
 ) => {
   const quesList = [...currState.questions];
-  console.log(quesList[quesIndex].options);
-  quesList[quesIndex].options = [...quesList[quesIndex].options, {
+  const question = {
+    ...quesList[quesIndex]
+  };
+  question.options = [...question.options, {
     isSelected: false,
     value: ''
   }]; 
-  console.log(quesList[quesIndex].options);
-
+  quesList[quesIndex] = question;
   return {
     ...currState,
     questions: quesList

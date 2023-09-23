@@ -17,9 +17,14 @@ const Creates = () => {
           quesIndex={index}
         />)
       }
-      <button className='self-end bg-red-300 text-teal-900 font-semibold px-3 py-1 rounded'
-        onClick={addQuestionHandler}
-      >Add Question</button>
+      <div className='self-end flex gap-2'>
+        <button className='bg-red-300 text-teal-900 font-semibold px-3 py-1 rounded'
+          onClick={addQuestionHandler}
+        >Add Question</button>
+        <button className='bg-green-300 text-teal-900 font-semibold px-3 py-1 rounded'
+          onClick={() => {}}
+        >Create Quiz</button>
+      </div>
     </div>
   );
 };
