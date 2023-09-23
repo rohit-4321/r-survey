@@ -1,10 +1,13 @@
 import React, {FC, memo, useCallback, useState } from 'react';
 import { AuthButton } from './AuthButton';
+import { SignUpUser } from '../../api/apis';
+import { createSnackbar } from '../../global';
 
 const useSignUpState = () => {
   const [name, setName] = useState('');
   const [email , setEmail]  =useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const setSignupEmail = useCallback((e: string) => {
     setEmail(e);
@@ -16,11 +19,26 @@ const useSignUpState = () => {
   const setSignupName = useCallback((s: string) => {setName(s);}, []);
 
   const signUpFirebase = useCallback(() => {
-
+    setIsLoading(true);
+    SignUpUser({
+      email,
+      password,
+      userName: name,
+    }).then( res => {
+      setIsLoading(false);
+      localStorage.setItem('token', res.data.jwtToken);
+    }).catch(err => {
+      setIsLoading(false);
+      createSnackbar({
+        message: err?.response?.data.errCode,
+        duration: 'medium',
+        varient: 'error'
+      });
+    });
   }, [email, password]);
 
   return {
-    email,password, setSignupPassword, setSignupEmail, signUpFirebase, name, setSignupName
+    email,password, setSignupPassword, setSignupEmail, signUpFirebase, name, setSignupName, isLoading
   };
 };
 interface SignupProps {
@@ -37,7 +55,8 @@ const Signup:FC<SignupProps> = ({
     setSignupEmail,
     name,
     setSignupName,
-    signUpFirebase
+    signUpFirebase,
+    isLoading,
   } = useSignUpState();
 
   return <div className="flex flex-col items-center gap-2 w-[22rem] border-gray-400 border-2 rounded px-5 py-10">
@@ -63,7 +82,9 @@ const Signup:FC<SignupProps> = ({
     />
     <AuthButton onClick={() => {
       signUpFirebase();
-    }} value='Signup'/>
+    }} value='Signup'
+    isLoading={isLoading}
+    />
 	
     {children}
   </div>;
