@@ -14,7 +14,6 @@ const Title:FC<OwnProps> = ({
   setDescriptions,
   setTitle
 }) => {
-  console.log('Title rendered');
   const onTitleUpdate = (ev: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTitle(ev.target.value);
   };
@@ -44,18 +43,19 @@ const Title:FC<OwnProps> = ({
 // Trying something........................
 const TitleMemoWrapper = () => {
   const {state, dispatch} = useCreateTestContext();
+  console.log(state);
   const onTitleUpdate = useCallback((value: string) => {
     dispatch({
       type: 'setTitle',
       payload: value,
     });
-  }, []);
+  }, [dispatch]);
   const onDescriptionUpdate = useCallback((value: string) => {
     dispatch({
       type: 'setDescriptions',
       payload: value,
     });
-  }, []);
+  }, [dispatch]);
   return useMemo(() =>  <Title
     title={state.title} 
     description={state.description}
