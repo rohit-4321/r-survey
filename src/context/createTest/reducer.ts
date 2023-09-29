@@ -1,3 +1,4 @@
+import { resetState } from './reducer';
 import { useCallback, useState } from 'react';
 import { Question, TestSchema } from './CreateTestContext';
 
@@ -9,6 +10,10 @@ export const initialValue: TestSchema= {
 };
 
 export type Handler<T> = (state: TestSchema, payload: T) => TestSchema
+
+export const resetState:Handler<undefined> = () => {
+  return initialValue;
+};
 
 export const setTitle: Handler<string> = (currState, payload) => {
   return {
@@ -235,6 +240,7 @@ export type AllActionsHandler = {
   addQuestionText: typeof addQuestionText,
   onDeleteOption: typeof onDeleteOption,
   addOption: typeof addOption,
+  resetState: typeof resetState,
 }
 
 const actions: AllActionsHandler = {
@@ -249,7 +255,8 @@ const actions: AllActionsHandler = {
   setOptionText,
   addQuestionText,
   onDeleteOption,
-  addOption
+  addOption,
+  resetState
 };
 export type AllActions = {
   [key in keyof AllActionsHandler]: Parameters<(AllActionsHandler)[key]>[1]

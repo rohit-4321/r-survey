@@ -1,3 +1,4 @@
+import { TestSchema } from './../context/createTest/CreateTestContext';
 import axiosInstance from './axios';
 
 interface SignUpApiProps {
@@ -37,3 +38,4 @@ export const LoginUser = ({
     password
   });
 };
+
