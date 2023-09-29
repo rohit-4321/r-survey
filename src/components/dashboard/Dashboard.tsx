@@ -1,9 +1,6 @@
 
-import {EmptyQuizSvg} from '../../assets/empty-create';
-import { FC, useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { FC } from 'react';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import axiosInstance from '../../api/axios';
 import { createSnackbar } from '../../global';
 import { useAllQuizesData } from './useAllQuizesData';
 import { copyToClipBoard, formatDateTime } from '../../global/utils';
