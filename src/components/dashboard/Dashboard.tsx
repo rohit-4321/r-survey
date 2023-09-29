@@ -1,12 +1,12 @@
 
 import {EmptyQuizSvg} from '../../assets/empty-create';
-import { FC, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import axiosInstance from '../../api/axios';
 import { createSnackbar } from '../../global';
 import { useAllQuizesData } from './useAllQuizesData';
-import { formatDateTime } from '../../global/utils';
+import { copyToClipBoard, formatDateTime } from '../../global/utils';
 
 interface QuizCardProps {
   title: string,
@@ -65,7 +65,17 @@ const QuizCard:FC<QuizCardProps> = ({
 
       <span className='text-gray-300 text-base font-normal overflow-hidden text-ellipsis'>{code}</span>
       
-      <ContentCopyIcon className='text-gray-300 shrink-0' fontSize="small" />
+      <div className='hover:bg-[#2b3c55] transition-all decoration-purple-500 rounded-full p-2 flex items-center justify-center'
+        onClick={() => {
+          copyToClipBoard(code);
+          createSnackbar({
+            message: 'Copied',
+            varient: 'success',
+            duration: 'short'
+          });
+        }}>
+        <ContentCopyIcon className='text-gray-300 shrink-0' fontSize="small" />
+      </div>
     </div>
     <div className="flex justify-between text-sm mt-4">
       <div>

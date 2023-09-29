@@ -21,3 +21,6 @@ export function formatDateTime(dateString: string): string {
   return formattedDateTime;
 }
 
+export const copyToClipBoard = (value: string) => {
+  navigator.clipboard.writeText(value);
+};
