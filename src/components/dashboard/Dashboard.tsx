@@ -4,6 +4,7 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { createSnackbar } from '../../global';
 import { useAllQuizesData } from './useAllQuizesData';
 import { copyToClipBoard, formatDateTime } from '../../global/utils';
+import { LoadingSVG } from '../../assets/LoadingSVG';
 
 interface QuizCardProps {
   title: string,
@@ -23,7 +24,7 @@ export const Dashboard = () => {
       <EmptyQuizSvg  />
     </div> */}
     {
-      loading ? <h1>Loading...</h1>
+      loading ? <LoadingSVG className='w-20 h-20 mx-auto mt-4' />
         : <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
           {
             data.map((i)  => (<QuizCard 
