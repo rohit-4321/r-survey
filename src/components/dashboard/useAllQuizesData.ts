@@ -21,6 +21,7 @@ export const useAllQuizesData = () => {
     if (!token || token == ''){
       navigate('/auth');
     }else {
+      setLoading(true);
       axiosInstance.get('/quizes', {
         headers: {
           Authorization: `Bearer ${token}`
