@@ -1,6 +1,7 @@
 import { Route,  Routes } from 'react-router-dom';
 import { router } from './routes/BrowserRouter';
 import { Header } from './components/ui/header/Header';
+import { browserRouteProtected } from './routes/BrowserRouteProtected';
 
 function App() {
 
@@ -10,6 +11,9 @@ function App() {
       <Routes>
         {
           router.map((route) => <Route key={route.path} path={route.path} element={route.element} />)
+        }
+        {
+          browserRouteProtected.map((route) => <Route key={route.path} path={route.path} element={route.element}/>)
         }
       </Routes>
     </div>

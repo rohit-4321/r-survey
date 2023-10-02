@@ -1,4 +1,4 @@
-import '../App.css';
+import '../../App.css';
 type SnackbarVarient = 'error' | 'success' | 'warning';
 const Duration = {
   veryShort: 500,

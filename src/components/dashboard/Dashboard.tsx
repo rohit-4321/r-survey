@@ -1,8 +1,8 @@
 
 import { FC } from 'react';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import { createSnackbar } from '../../global';
-import { useAllQuizesData } from './useAllQuizesData';
+import { createSnackbar } from '../ui/createSnackbar';
+import { useAllQuizesData } from '../../hooks/apis/useAllQuizesData';
 import { copyToClipBoard, formatDateTime } from '../../global/utils';
 import { LoadingSVG } from '../../assets/LoadingSVG';
 

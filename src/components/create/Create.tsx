@@ -1,21 +1,13 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { CreateTestProvider, useCreateTestContext,  } from '../../context/createTest/CreateTestContext';
 import  QuestionCreate  from './QuestionCreate';
 import Title  from './Title';
 import { useCreateQuizApi } from '../../hooks/apis/createquiz';
-import { createSnackbar } from '../../global';
-import { useNavigate } from 'react-router-dom';
+import { createSnackbar } from '../ui/createSnackbar';
 import { Modal } from '../ui/Modal';
 
 const Creates = () => {
-  const navigate = useNavigate();
   const [isModalVisible, setIsModalVisible] = useState(false);
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (!token || token == ''){
-      navigate('/auth');
-    }
-  }, []);
   const {isLoading: quizSavingLoading, trigger } = useCreateQuizApi();
   const {state, dispatch} = useCreateTestContext();
   const addQuestionHandler = () => {
