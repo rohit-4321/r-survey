@@ -1,4 +1,4 @@
-import { createSnackbar } from '../../global';
+import { createSnackbar } from '../ui/createSnackbar';
 
 export const Home = () => {
   return <div>

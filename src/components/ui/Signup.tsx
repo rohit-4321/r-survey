@@ -1,7 +1,7 @@
 import React, {FC, memo, useCallback, useState } from 'react';
 import { AuthButton } from './AuthButton';
 import { SignUpUser } from '../../api/apis';
-import { createSnackbar } from '../../global';
+import { createSnackbar } from './createSnackbar';
 
 const useSignUpState = () => {
   const [name, setName] = useState('');
