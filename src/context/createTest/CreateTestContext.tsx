@@ -1,5 +1,5 @@
 import React, { FC, createContext, useContext } from 'react';
-import { AllActions, AllActionsHandler, useCreateTestState } from './reducer';
+import { DispatchFunctionType, useCreateTestState } from './reducer';
 
 export interface TestSchema {
   title: string
@@ -18,10 +18,7 @@ export interface Question {
 
 export const CreateTestContext = createContext<{
   state: TestSchema,
-  dispatch: <T extends keyof AllActionsHandler, K extends AllActions[T]>({ type, payload }: {
-    type: T;
-    payload: K;
-  }) => void
+  dispatch: DispatchFunctionType
     } | null>(null);
 
 
