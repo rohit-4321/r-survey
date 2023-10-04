@@ -1,4 +1,3 @@
-import { resetState } from './reducer';
 import { useCallback, useState } from 'react';
 import { Question, TestSchema } from './CreateTestContext';
 
