@@ -9,10 +9,7 @@ interface SignUpResponse {
   jwtToken: string,
   id: string
 }
-// interface ServerErr {
-//   message: string,
-//   errCode: string
-// }
+
 export const SignUpUser = ({
   email,
   password,

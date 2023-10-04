@@ -1,8 +1,9 @@
 import { FC, createContext, useContext } from 'react';
 import { JoinQuizSuccessResponse } from '../../components/join/join.interface';
+import { JoinQuizDispatchFunctionType, useJoinQuizState } from './reducer';
 
 
-interface JoinQuizState {
+export interface JoinQuizState {
     isLoading: boolean,
     error?: string,
     quizData?: JoinQuizSuccessResponse
@@ -10,15 +11,14 @@ interface JoinQuizState {
 }
 export const JoinQuizContext = createContext<{
     state: JoinQuizState,
-    // dispatch: 
+    dispatch: JoinQuizDispatchFunctionType
 } | null>(null);
 
 export const CreateJoinQuizContextProvider:FC<{
     children: React.ReactNode
 }> = ({children}) => {
-  const {state} = useJoinQuizContext();
-
-  return <JoinQuizContext.Provider value={{state}}>
+  const [state, dispatch] = useJoinQuizState();
+  return <JoinQuizContext.Provider value={{state, dispatch}}>
     {children}
   </JoinQuizContext.Provider>;
 };
