@@ -5,7 +5,7 @@ import { browserRouteProtected } from './routes/BrowserRouteProtected';
 
 function App() {
 
-  return <div className='App h-screen bg-[#1A212F] text-slate-300 flex flex-col'>
+  return <div className='App h-screen bg-[#141d24] text-slate-300 flex flex-col'>
     <Header />
     <div className='flex-auto overflow-auto'>
       <Routes>
