@@ -1,6 +1,6 @@
-import { resetState } from './reducer';
 import { useCallback, useState } from 'react';
 import { Question, TestSchema } from './CreateTestContext';
+import { ActionHandler, ExtractSecondParameter, createAllActionMap } from '..';
 
 /// I just want to use Generics 🙂🙂
 export const initialValue: TestSchema= {
@@ -9,26 +9,25 @@ export const initialValue: TestSchema= {
   questions: [],
 };
 
-export type Handler<T> = (state: TestSchema, payload: T) => TestSchema
 
-export const resetState:Handler<undefined> = () => {
+export const resetState:ActionHandler<TestSchema,undefined> = () => {
   return initialValue;
 };
 
-export const setTitle: Handler<string> = (currState, payload) => {
+export const setTitle: ActionHandler<TestSchema,string> = (currState, payload) => {
   return {
     ...currState,
     title : payload
   };
 };
-export const setDescriptions: Handler<string> = (currState, payload) => {
+export const setDescriptions: ActionHandler<TestSchema,string> = (currState, payload) => {
   return {
     ...currState,
     description: payload
   };
 };
 
-export const addQuestion: Handler<undefined> = (currState) => {
+export const addQuestion: ActionHandler<TestSchema,undefined> = (currState) => {
   const ques: Question = {
     value: '',
     type: 'single',
@@ -40,7 +39,7 @@ export const addQuestion: Handler<undefined> = (currState) => {
   };
 };
 
-export const modifyQuestion: Handler<{index: number, question: Question}>  =(currState, payload) => {
+export const modifyQuestion: ActionHandler<TestSchema,{index: number, question: Question}>  =(currState, payload) => {
   const q = [...currState.questions];
   q[payload.index] = payload.question;
   return {
@@ -49,7 +48,7 @@ export const modifyQuestion: Handler<{index: number, question: Question}>  =(cur
   };
 };
 
-export const removeAllSelectedOption: Handler<number> = (currState, payload) => {
+export const removeAllSelectedOption: ActionHandler<TestSchema,number> = (currState, payload) => {
   const quesList = [...currState.questions];
   const questionToModify = { ...quesList[payload] };
   const optionsToModify = [...questionToModify.options];
@@ -65,7 +64,7 @@ export const removeAllSelectedOption: Handler<number> = (currState, payload) => 
   };
 };
 
-export const addQuestionText: Handler<{
+export const addQuestionText: ActionHandler<TestSchema,{
   quesIndex: number,
   value: string
 }> = (
@@ -86,7 +85,7 @@ export const addQuestionText: Handler<{
     questions: quesList,
   };
 };
-export const onQuestionTypeSelected: Handler<{
+export const onQuestionTypeSelected: ActionHandler<TestSchema,{
   quesIndex: number,
   value: 'multi' | 'single'
 }> = (currState, {
@@ -109,7 +108,7 @@ export const onQuestionTypeSelected: Handler<{
     questions: quesList
   };
 };
-export const onRadioOptionSelect: Handler<{
+export const onRadioOptionSelect: ActionHandler<TestSchema,{
   quesIndex: number,
   optionIndex: number
 }> = (
@@ -137,7 +136,7 @@ export const onRadioOptionSelect: Handler<{
   };
 };
 
-export const onCheckOptionSelect: Handler<{
+export const onCheckOptionSelect: ActionHandler<TestSchema,{
   quesIndex: number,
   optionIndex: number
 }> = (
@@ -161,7 +160,7 @@ export const onCheckOptionSelect: Handler<{
   };
 };
 
-export const setOptionText:Handler<{
+export const setOptionText:ActionHandler<TestSchema,{
   quesIndex: number,
   optionIndex: number,
   value: string
@@ -182,7 +181,7 @@ export const setOptionText:Handler<{
     questions: quesList
   };
 };
-export const onDeleteOption:Handler<{
+export const onDeleteOption:ActionHandler<TestSchema,{
   quesIndex: number,
   optionIndex: number
 }> = (
@@ -204,7 +203,7 @@ export const onDeleteOption:Handler<{
     questions: quesList
   };
 };
-export const addOption:Handler<{
+export const addOption:ActionHandler<TestSchema,{
   quesIndex: number,
 }> = (
   currState,
@@ -227,69 +226,44 @@ export const addOption:Handler<{
   };
 };
 
-export type AllActionsHandler = {
-  setTitle: typeof setTitle,
-  setDescriptions:  typeof setDescriptions,
-  addQuestion: typeof addQuestion,
-  modifyQuestion: typeof modifyQuestion,
-  removeAllSelectedOption: typeof removeAllSelectedOption
-  onRadioOptionSelect: typeof onRadioOptionSelect,
-  onQuestionTypeSelected: typeof onQuestionTypeSelected,
-  onCheckOptionSelect: typeof onCheckOptionSelect,
-  setOptionText: typeof setOptionText,
-  addQuestionText: typeof addQuestionText,
-  onDeleteOption: typeof onDeleteOption,
-  addOption: typeof addOption,
-  resetState: typeof resetState,
-}
 
-const actions: AllActionsHandler = {
-  addQuestion,
-  modifyQuestion,
-  removeAllSelectedOption,
-  setDescriptions,
-  setTitle,
-  onRadioOptionSelect,
-  onQuestionTypeSelected,
-  onCheckOptionSelect,
-  setOptionText,
-  addQuestionText,
-  onDeleteOption,
-  addOption,
-  resetState
-};
-export type AllActions = {
-  [key in keyof AllActionsHandler]: Parameters<(AllActionsHandler)[key]>[1]
-}
+const createQuizSlice  = createAllActionMap({
+  initialState: initialValue,
+  actions: {
+    addQuestion,
+    modifyQuestion,
+    removeAllSelectedOption,
+    setDescriptions,
+    setTitle,
+    onRadioOptionSelect,
+    onQuestionTypeSelected,
+    onCheckOptionSelect,
+    setOptionText,
+    addQuestionText,
+    onDeleteOption,
+    addOption,
+    resetState
+  }
+});
 
 
 
-export const reducer = (
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  currState: any,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  action: any,
-) => {
-  const func = actions[action.type as keyof AllActions];
-  return func(currState, action.payload as never);
+type DispatchActionType<T, K> = {
+  type: T,
+  payload: K
 };
 
-export type DispatchType = Parameters<typeof reducer>[1];
+export type DispatchFunctionType = <T extends keyof typeof createQuizSlice['actions'], K extends ExtractSecondParameter<typeof createQuizSlice['actions'][T]>>(
+action: DispatchActionType<T, K>
+) => void;
 
 export const useCreateTestState = () => {
   const [state, setState] = useState<TestSchema>(initialValue);
-  const dispatch = useCallback(<T extends keyof AllActions, K extends AllActions[T]>(
-    {
-      type, payload
-    }: {
-      type: T,
-      payload: K,
-    }
-  ) => {
-    setState((state) => reducer(state, {
-      type,
-      payload
-    }));
+  const dispatch:DispatchFunctionType = useCallback(({type, payload}) => {
+    setState((currState) => {
+      const func =createQuizSlice['actions'][type];
+      return func(currState, payload);
+    });
   }, []);
 
   return [
