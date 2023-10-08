@@ -43,7 +43,6 @@ const Title:FC<OwnProps> = ({
 // Trying something........................
 const TitleMemoWrapper = () => {
   const {state, dispatch} = useCreateTestContext();
-  console.log(state);
   const onTitleUpdate = useCallback((value: string) => {
     dispatch({
       type: 'setTitle',

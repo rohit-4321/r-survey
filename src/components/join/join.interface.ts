@@ -3,7 +3,7 @@ export interface JoinQuizSuccessResponse {
   title:       string;
   description: string;
   questions:   Question[];
-  answers:     null;
+  creatorEmail: string;
 }
 
 export interface Question {

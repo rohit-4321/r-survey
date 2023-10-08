@@ -1,18 +1,34 @@
-import { FC, createContext, useContext } from 'react';
+import { FC, createContext, useCallback, useContext, useState } from 'react';
 import { JoinQuizSuccessResponse } from '../../components/join/join.interface';
-import { JoinQuizDispatchFunctionType, useJoinQuizState } from './reducer';
+import { JoinQuizDispatchFunctionType, initialValue, joinQuizSlice } from './reducer';
 
 
 export interface JoinQuizState {
-    isLoading: boolean,
-    error?: string,
-    quizData?: JoinQuizSuccessResponse
+    quizId: string,
+    creatorEmail: string
+    quizData: JoinQuizSuccessResponse | null
     answers: Record<string,string[]>
 }
 export const JoinQuizContext = createContext<{
     state: JoinQuizState,
     dispatch: JoinQuizDispatchFunctionType
 } | null>(null);
+
+
+
+const useJoinQuizState = () => {
+  const [state, setState] = useState<JoinQuizState>(initialValue);
+  const dispatch:JoinQuizDispatchFunctionType = useCallback(({type, payload}) => {
+    setState((currState) => {
+      const func =joinQuizSlice['actions'][type];
+      return func(currState, payload);
+    });
+  }, []);
+
+  return [
+    state, dispatch
+  ] as const;
+};
 
 export const CreateJoinQuizContextProvider:FC<{
     children: React.ReactNode
