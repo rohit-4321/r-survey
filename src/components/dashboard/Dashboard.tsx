@@ -80,7 +80,7 @@ const QuizCard:FC<QuizCardProps> = ({
         <p className="text-gray-400 font-semibold">Created At</p>
         <p className="text-gray-300">{formatDateTime(createdAt)}</p>
         <p className="text-gray-400 font-semibold mt-2">Last Response</p>
-        <p className="text-gray-300">{lastResponse}</p>
+        <p className="text-gray-300">{formatDateTime(lastResponse)}</p>
       </div>
       <div>
         <p className="text-gray-400 font-semibold">No of Responses</p>
@@ -91,21 +91,3 @@ const QuizCard:FC<QuizCardProps> = ({
     </div>
   </div> ;
 };
-
-
-
-
-{/* <div className='flex flex-col gap-2 border-[1px] border-slate-700 rounded px-6 py-5 bg-[#171C28]'>
-    <span className=' text-cyan-200 text-3xl font-medium'>{title}</span>
-    <span className='text-slate-400 text-sm line-clamp-2 overflow-hidden text-ellipsis from-neutral-300 font-normal'>{description}</span>
-    <div className='flex justify-between text-[0.9rem]'>
-      <div>
-        <p><span className='text-slate-400 font-semibold'>Created At:</span> {createdAt}</p>
-        <p><span className='text-slate-400 font-semibold'>Last Response:</span> {lastResponse}</p>
-      </div>
-      <div>
-        <p><span className='text-slate-400 font-semibold'>No of Response:</span> {numberOfResponses}</p>
-        <p><span className='text-slate-400 font-semibold'>No of Questions:</span> {numberOfQuestions}</p>
-      </div>
-    </div>
-  </div> */}
