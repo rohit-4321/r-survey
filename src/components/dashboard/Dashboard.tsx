@@ -78,9 +78,9 @@ const QuizCard:FC<QuizCardProps> = ({
     <div className="flex justify-between text-sm mt-4">
       <div>
         <p className="text-gray-400 font-semibold">Created At</p>
-        <p className="text-gray-300">{formatDateTime(createdAt)}</p>
+        <p className="text-gray-300">{createdAt ? formatDateTime(createdAt) : 'NA'}</p>
         <p className="text-gray-400 font-semibold mt-2">Last Response</p>
-        <p className="text-gray-300">{formatDateTime(lastResponse)}</p>
+        <p className="text-gray-300">{lastResponse ? formatDateTime(lastResponse) : 'No Response Yet' }</p>
       </div>
       <div>
         <p className="text-gray-400 font-semibold">No of Responses</p>
