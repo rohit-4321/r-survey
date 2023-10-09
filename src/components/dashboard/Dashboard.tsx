@@ -5,6 +5,7 @@ import { createSnackbar } from '../ui/createSnackbar';
 import { useAllQuizesData } from '../../hooks/apis/useAllQuizesData';
 import { copyToClipBoard, formatDateTime } from '../../global/utils';
 import { LoadingSVG } from '../../assets/LoadingSVG';
+import { EmptyQuizSvg } from '../../assets/empty-create';
 
 interface QuizCardProps {
   title: string,
@@ -20,8 +21,9 @@ export const Dashboard = () => {
   const {data, loading } = useAllQuizesData();
   return <div className='wrapper lg:w-[85%] w-[96%] flex flex-col gap-5 text-slate-100 font-light mx-auto my-6'>
     <h1 className='text-gray-200 text-3xl font-semibold border-gray-800 border-b-[2px] py-2'>Quizes Created</h1>
-    {/* <div className='w-[400px] self-center'>
+    {/* <div className='w-[400px] self-center flex flex-col gap-24 items-center'>
       <EmptyQuizSvg  />
+      <button className='bg-blue-300 text-slate-900  font-semibold py-2 px-5 rounded-md text-2xl tracking-wide'> + Create </button>
     </div> */}
     {
       loading ? <LoadingSVG className='w-20 h-20 mx-auto mt-4' />
