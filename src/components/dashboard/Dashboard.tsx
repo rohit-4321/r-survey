@@ -5,7 +5,7 @@ import { createSnackbar } from '../ui/createSnackbar';
 import { useAllQuizesData } from '../../hooks/apis/useAllQuizesData';
 import { copyToClipBoard, formatDateTime } from '../../global/utils';
 import { LoadingSVG } from '../../assets/LoadingSVG';
-import { EmptyQuizSvg } from '../../assets/empty-create';
+// import { EmptyQuizSvg } from '../../assets/empty-create';
 
 interface QuizCardProps {
   title: string,
