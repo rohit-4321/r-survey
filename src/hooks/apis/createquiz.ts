@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import axiosInstance from '../../api/axios';
+import axiosInstance, { useFetchRequest } from '../../api/axios';
 import { TestSchema } from '../../context/createTest/CreateTestContext';
 import { AxiosResponse } from 'axios';
 
@@ -14,16 +14,21 @@ export const CreateQuizApi = (data: TestSchema) => {
 
 export const useCreateQuizApi  = () => {
   const [isLoading, setIsLoading] = useState(false);
-
+  const {requestTigger} = useFetchRequest();
   const trigger = useCallback((data : TestSchema) => new Promise<AxiosResponse<{id: string}>>((resolve, reject) => {
     setIsLoading(true);
-    CreateQuizApi(data)
+    requestTigger({
+      method: 'POST',
+      url: '/create',
+      data
+    })
       .then(res => {
-        setIsLoading(false);
         resolve(res);
       }).catch(err => {
-        setIsLoading(false);
         reject(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }), []);
   return {

@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { createSnackbar } from '../../components/ui/createSnackbar';
-import axiosInstance, { ServerErr, getRequest } from '../../api/axios';
+import { ServerErr, getRequest, useFetchRequest } from '../../api/axios';
 import { AxiosError } from 'axios';
 type UserFormItemSchema = {
   _id: string;
@@ -20,15 +19,17 @@ type Response = {
 export const useAllQuizesData = () => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<UserFormItemSchema[]>([]);
+
+
+  const  {requestTigger} = useFetchRequest();
   useEffect(() => {
     setLoading(true);
-    getRequest<Response>({
+    requestTigger<Response>({
+      method: 'GET',
       url: '/quizes'
-    }).then(res => {
+    }).then((res) => {
       setData(res.data.data);
-      setLoading(false);
     }).catch((err: AxiosError<ServerErr>) => {
-      setLoading(false);
       if(err.response?.data.errCode) {
         createSnackbar({
           message:  err?.response?.data.errCode,
@@ -36,8 +37,10 @@ export const useAllQuizesData = () => {
           varient: 'error'
         });
       }
+    }).finally(() => {
+      setLoading(false);
     });
   }, []);
-  return {loading, data};
 
+  return {loading, data};
 };

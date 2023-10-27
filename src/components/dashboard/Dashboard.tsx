@@ -5,6 +5,7 @@ import { createSnackbar } from '../ui/createSnackbar';
 import { useAllQuizesData } from '../../hooks/apis/useAllQuizesData';
 import { copyToClipBoard, formatDateTime } from '../../global/utils';
 import { LoadingSVG } from '../../assets/LoadingSVG';
+// import { EmptyQuizSvg } from '../../assets/empty-create';
 
 interface QuizCardProps {
   title: string,
@@ -20,8 +21,9 @@ export const Dashboard = () => {
   const {data, loading } = useAllQuizesData();
   return <div className='wrapper lg:w-[85%] w-[96%] flex flex-col gap-5 text-slate-100 font-light mx-auto my-6'>
     <h1 className='text-gray-200 text-3xl font-semibold border-gray-800 border-b-[2px] py-2'>Quizes Created</h1>
-    {/* <div className='w-[400px] self-center'>
+    {/* <div className='w-[400px] self-center flex flex-col gap-24 items-center'>
       <EmptyQuizSvg  />
+      <button className='bg-blue-300 text-slate-900  font-semibold py-2 px-5 rounded-md text-2xl tracking-wide'> + Create </button>
     </div> */}
     {
       loading ? <LoadingSVG className='w-20 h-20 mx-auto mt-4' />
@@ -78,9 +80,9 @@ const QuizCard:FC<QuizCardProps> = ({
     <div className="flex justify-between text-sm mt-4">
       <div>
         <p className="text-gray-400 font-semibold">Created At</p>
-        <p className="text-gray-300">{formatDateTime(createdAt)}</p>
+        <p className="text-gray-300">{createdAt ? formatDateTime(createdAt) : 'NA'}</p>
         <p className="text-gray-400 font-semibold mt-2">Last Response</p>
-        <p className="text-gray-300">{lastResponse}</p>
+        <p className="text-gray-300">{lastResponse ? formatDateTime(lastResponse) : 'No Response Yet' }</p>
       </div>
       <div>
         <p className="text-gray-400 font-semibold">No of Responses</p>
@@ -91,21 +93,3 @@ const QuizCard:FC<QuizCardProps> = ({
     </div>
   </div> ;
 };
-
-
-
-
-{/* <div className='flex flex-col gap-2 border-[1px] border-slate-700 rounded px-6 py-5 bg-[#171C28]'>
-    <span className=' text-cyan-200 text-3xl font-medium'>{title}</span>
-    <span className='text-slate-400 text-sm line-clamp-2 overflow-hidden text-ellipsis from-neutral-300 font-normal'>{description}</span>
-    <div className='flex justify-between text-[0.9rem]'>
-      <div>
-        <p><span className='text-slate-400 font-semibold'>Created At:</span> {createdAt}</p>
-        <p><span className='text-slate-400 font-semibold'>Last Response:</span> {lastResponse}</p>
-      </div>
-      <div>
-        <p><span className='text-slate-400 font-semibold'>No of Response:</span> {numberOfResponses}</p>
-        <p><span className='text-slate-400 font-semibold'>No of Questions:</span> {numberOfQuestions}</p>
-      </div>
-    </div>
-  </div> */}

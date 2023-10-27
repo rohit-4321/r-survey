@@ -1,23 +1,27 @@
 import { useCallback, useState } from 'react';
-import { postRequest } from '../../api/axios';
+import { useFetchRequest } from '../../api/axios';
 import { JoinQuizSuccessResponse } from '../../components/join/join.interface';
 import { AxiosResponse } from 'axios';
 
 export const  getJoinQuizData = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const {requestTigger} = useFetchRequest();
 
   const trigger = useCallback((data : {quizId: string}) => new Promise<AxiosResponse<JoinQuizSuccessResponse>>((resolve, reject) => {
     setIsLoading(true);
-    postRequest<JoinQuizSuccessResponse, typeof data>({
+    requestTigger<JoinQuizSuccessResponse>({
+      method: 'POST',
       url: '/join',
-      data: data
+      data
     })
       .then(res => {
-        setIsLoading(false);
         resolve(res);
-      }).catch(err => {
-        setIsLoading(false);
+      })
+      .catch(err => {
         reject(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }), []);
 

@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { postRequest } from '../../api/axios';
+import { useFetchRequest } from '../../api/axios';
 import { AxiosResponse } from 'axios';
 
 
@@ -15,10 +15,12 @@ interface Payload {
 }
 export const useSubmitQuiz = () => {
   const [isLoading, setLoading] = useState(false);
+  const {requestTigger} = useFetchRequest();
 
   const trigger =  useCallback((data: Payload) => new Promise<AxiosResponse<Response>>((resolve, reject) => {
     setLoading(true);
-    postRequest<Response, Payload>({
+    requestTigger<Response>({
+      method: 'POST',
       url: 'submitQuiz',
       data,
     }).then((res) => {
